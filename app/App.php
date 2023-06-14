@@ -34,8 +34,23 @@ function getTransaction(string $fileName):array
     $transactions = [];
     // read line by line from the file with fgetcsv function
     while (($transaction = fgetcsv($file)) !== false) {
-        $transactions[] = $transaction;
+        $transactions[] = formatTransaction($transaction);
     }
 
     return $transactions;
+}
+
+/* Format transaction amount */
+function formatTransaction(array $transactionRow): array
+{
+    [$date, $checkNumber, $description, $amount] = $transactionRow;
+
+    $amount = (float) str_replace(['$',','], '', $amount);   
+    
+    return [
+        'date' => $date,
+        'checkNumber' => $checkNumber,
+        'description' => $description,
+        'amount' => $amount
+    ];
 }
