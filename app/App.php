@@ -20,7 +20,7 @@ function getTransactionFiles(string $dirPath):array
 }
 
 /* read each file and extract transactions from it */
-function getTransaction(string $fileName):array
+function getTransaction(string $fileName, ?callable $transactionHandler = null): array
 {
     // verify existence of file
     if (! file_exists($fileName)) {
@@ -34,7 +34,11 @@ function getTransaction(string $fileName):array
     $transactions = [];
     // read line by line from the file with fgetcsv function
     while (($transaction = fgetcsv($file)) !== false) {
-        $transactions[] = formatTransaction($transaction);
+        if ($transactionHandler !== null) {
+            $transaction = $transactionHandler($transaction);
+        }
+
+        $transactions[] = $transaction;
     }
 
     return $transactions;
@@ -53,4 +57,25 @@ function formatTransaction(array $transactionRow): array
         'description' => $description,
         'amount' => $amount
     ];
+}
+
+/* Calculate Totals */
+function calculateTotals(array $transactions): array
+{
+    $totals = [
+        'netTotal' => 0, 
+        'totalIncome' => 0, 
+        'totalExpense' => 0, 
+    ];
+    
+    foreach ($transactions as $transaction) {
+        $totals['netTotal'] += $transaction['amount'];
+        if ($transaction['amount'] >= 0) {
+            $totals['totalIncome'] += $transaction['amount'];
+        } else {
+            $totals['totalExpense'] += $transaction['amount'];
+        }
+    }
+
+    return $totals;
 }

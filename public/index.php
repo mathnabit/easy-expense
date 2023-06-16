@@ -17,8 +17,10 @@ $files = getTransactionFiles(FILES_PATH);
 $transactions = [];
 
 foreach ($files as $file) {
-    $transactions = array_merge($transactions, getTransaction($file));
+    $transactions = array_merge($transactions, getTransaction($file, 'formatTransaction'));
 }
+
+$totals = calculateTotals($transactions);
 
 // display the table of transactions
 require VIEWS_PATH . "transactions.php";
