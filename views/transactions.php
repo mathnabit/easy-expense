@@ -34,20 +34,29 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- CODE -->
+                <?php if (! empty($transactions)): ?>
+                    <?php foreach ($transactions as $transaction): ?>
+                        <tr>
+                            <td> <?= $transaction['date'] ?> </td>
+                            <td> <?= $transaction['checkNumber'] ?> </td>
+                            <td> <?= $transaction['description'] ?> </td>
+                            <td> <?= $transaction['amount'] ?> </td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php endif ?>
             </tbody>
             <tfoot>
                 <tr>
                     <th colspan="3">Total Income:</th>
-                    <td><!-- CODE --></td>
+                    <td> <?= $totals['totalIncome'] ?? 0 ?> </td>
                 </tr>
                 <tr>
                     <th colspan="3">Total Expense:</th>
-                    <td><!-- CODE --></td>
+                    <td> <?= $totals['totalExpense'] ?? 0 ?> </td>
                 </tr>
                 <tr>
                     <th colspan="3">Net Total:</th>
-                    <td><!-- CODE --></td>
+                    <td> <?= $totals['netTotal'] ?? 0 ?> </td>
                 </tr>
             </tfoot>
         </table>
