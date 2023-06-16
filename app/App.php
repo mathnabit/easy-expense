@@ -48,7 +48,9 @@ function getTransaction(string $fileName, ?callable $transactionHandler = null):
 function formatTransaction(array $transactionRow): array
 {
     [$date, $checkNumber, $description, $amount] = $transactionRow;
-
+    
+    // $amount1 = (float) str_replace(['$', ','], '', '$-1,303.97'); => -1303.97
+    // $amount2 = (float) str_replace(['$'], '', '$-1,303.97'); => -1
     $amount = (float) str_replace(['$',','], '', $amount);   
     
     return [
@@ -67,7 +69,7 @@ function calculateTotals(array $transactions): array
         'totalIncome' => 0, 
         'totalExpense' => 0, 
     ];
-    
+
     foreach ($transactions as $transaction) {
         $totals['netTotal'] += $transaction['amount'];
         if ($transaction['amount'] >= 0) {
